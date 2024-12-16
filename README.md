@@ -28,19 +28,17 @@
             <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original-wordmark.svg" title="Python" alt="Python" width="40" height="40"/>&nbsp;
             <img src="https://github.com/devicons/devicon/blob/master/icons/django/django-plain-wordmark.svg" title="Django" alt="Django" width="40" height="40"/>&nbsp;
         </div>
-        </div>
     </h3>
 </div>
 
 ---
-
 ## Локальная установка проекта
 
-1. Склонируйте репозиторий:
+1. Клонируйте репозиторий:
 ```bash
 git clone https://github.com/Iv-EN/useful_store.git
 ```
-2.  Создайте и активируйте виртуальное пространство:
+2. Создайте и активируйте виртуальное пространство:
 ```bash
 python3 -m venv venv
 ```
@@ -58,7 +56,7 @@ pip install -r requirements.txt
 
 ## Запуск проекта
 
-2. Для запуска проекта из корня проекта выполните команду:
+1. Для запуска проекта из корня проекта выполните команду:
 ```bash
 python3 manage.py runserver
 ```
@@ -76,4 +74,3 @@ ___
             <img src="https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white"/>
         </a>
     </div>
-</p>
