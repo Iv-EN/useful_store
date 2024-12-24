@@ -20,6 +20,8 @@ def contacts(request):
         file.write(message)
         file.close()
         messages.add_message(
-            request, messages.INFO, f"Спасибо, {user_name}! Данные успешно переданы."
+            request,
+            messages.INFO,
+            f"Спасибо, {user_name}! Данные успешно переданы.",
         )
     return render(request, template)
