@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 
 
 class Product(models.Model):
@@ -51,4 +52,24 @@ class Category(models.Model):
 
 
 class Contact(models.Model):
-    """Описывает контактную информацию."""
+    """Описывает информацию о контактном лице."""
+
+    name = models.CharField(max_length=100, verbose_name="Имя")
+    phone_regex = RegexValidator(
+        regex=r"^\+7\d{10}",
+        message="Телефонный номер необходимо вводить в формате '9999999999'",
+    )
+    phone_number = models.CharField(
+        validators=[phone_regex],
+        max_length=11,
+        verbose_name="Телефон",
+        blank=True
+    )
+    message = models.TextField(verbose_name="Сообщение")
+
+    def __str__(self):
+        return f"Контактное лицо: {self.name}, телефон: {self.phone_number}"
+
+    class Meta:
+        verbose_name = "Контактное лицо"
+        verbose_name_plural = "Контактные лица"
