@@ -44,6 +44,10 @@ class Command(BaseCommand):
         return file_path
 
     def handle(self, *args, **options):
+        answer = input("Внимание! Продолжение приведёт к перезаписи всех данных в базе! Продолжить? Да/Нет: ")
+        if answer.lower() != "да":
+            print("Загрузка отменена!")
+            return
         models = [Product, Category]
         for model in models:
             self.clear_models(model)
@@ -81,3 +85,5 @@ class Command(BaseCommand):
 
         for model in models:
             self.set_sequence(model)
+
+        print("Данные успешно загружены.")
