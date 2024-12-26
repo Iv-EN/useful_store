@@ -1,9 +1,14 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
 
+from  .models import Product
+
 
 def home(request):
     """Отображает главную страницу."""
+    last_five = Product.objects.all().order_by("-created_at")[:5]
+    for product in last_five:
+        print(product)
     return render(request, "home.html")
 
 
