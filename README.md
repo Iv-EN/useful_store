@@ -64,6 +64,19 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+## Подключение к базе данных
+1. Создайте базу данных `PostgreSQL`
+2. В корневом каталоге создайте файл `.env` и укажите в нём переменные окружения:
+```bash
+SECRET_KEY=секретный ключ Django
+DEBUG=True/False
+NAME=имя вашей базы данных
+USER=имя пользователя PostgreSQL
+PASSWORD=пароль пользователя PostgreSQL
+HOST=адрес сервера базы данных
+PORT=порт, на котором работает PostgreSQL, обычно 5432
+```
+
 ## Загрузка данных из фикстуры
 1. Убедитесь, что файл `fixtures/catalog_data.json` существует
 2. Выполните команду для загрузки данных
