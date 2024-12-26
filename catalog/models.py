@@ -63,7 +63,7 @@ class Contact(models.Model):
         validators=[phone_regex],
         max_length=12,
         verbose_name="Телефон",
-        blank=True
+        blank=True,
     )
     message = models.TextField(verbose_name="Сообщение")
 

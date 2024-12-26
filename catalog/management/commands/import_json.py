@@ -44,7 +44,9 @@ class Command(BaseCommand):
         return file_path
 
     def handle(self, *args, **options):
-        answer = input("Внимание! Продолжение приведёт к перезаписи всех данных в базе! Продолжить? Да/Нет: ")
+        answer = input(
+            "Внимание! Продолжение приведёт к перезаписи всех данных в базе! Продолжить? Да/Нет: "
+        )
         if answer.lower() != "да":
             print("Загрузка отменена!")
             return
