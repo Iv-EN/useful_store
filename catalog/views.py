@@ -16,9 +16,7 @@ def contacts(request):
     """Работа с контактами."""
     template = "contacts.html"
     contact_details = Contact.objects.all()
-    context = {
-        "contacts": contact_details
-    }
+    context = {"contacts": contact_details}
     if request.method == "POST":
         user_name = request.POST.get("name")
         phone = request.POST.get("phone")
