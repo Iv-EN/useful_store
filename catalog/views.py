@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
 
-from  .models import Product
+from .models import Contact, Product
 
 
 def home(request):
@@ -15,6 +15,10 @@ def home(request):
 def contacts(request):
     """Работа с контактами."""
     template = "contacts.html"
+    contact_details = Contact.objects.all()
+    context = {
+        "contacts": contact_details
+    }
     if request.method == "POST":
         user_name = request.POST.get("name")
         phone = request.POST.get("phone")
@@ -29,4 +33,4 @@ def contacts(request):
             messages.INFO,
             f"Спасибо, {user_name}! Данные успешно переданы.",
         )
-    return render(request, template)
+    return render(request, template, context)
