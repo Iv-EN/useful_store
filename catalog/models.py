@@ -56,12 +56,12 @@ class Contact(models.Model):
 
     name = models.CharField(max_length=100, verbose_name="Имя")
     phone_regex = RegexValidator(
-        regex=r"^\+7\d{10}",
-        message="Телефонный номер необходимо вводить в формате '9999999999'",
+        regex=r"^\+\d{8,15}$",
+        message="Телефонный номер необходимо вводить в формате '+9999999999'",
     )
     phone_number = models.CharField(
         validators=[phone_regex],
-        max_length=11,
+        max_length=12,
         verbose_name="Телефон",
         blank=True
     )
