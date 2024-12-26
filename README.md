@@ -76,6 +76,10 @@ PASSWORD=пароль пользователя PostgreSQL
 HOST=адрес сервера базы данных
 PORT=порт, на котором работает PostgreSQL, обычно 5432
 ```
+3. Примените миграции
+```bash
+python3 manage.py migrate
+```
 
 ## Загрузка данных из фикстуры
 1. Убедитесь, что файл `fixtures/catalog_data.json` существует
