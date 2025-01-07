@@ -14,9 +14,7 @@ class ProductForm(forms.ModelForm):
     def clean_image(self):
         """Проверка, что файл является изображением."""
         image = self.cleaned_data.get("image")
-        if image and not image.name.endswith(
-                ("jpg", "jpeg", "png", "gif")
-        ):
+        if image and not image.name.endswith(("jpg", "jpeg", "png", "gif")):
             raise forms.ValidationError(
                 "Изображение должно быть в формате JPG, JPEG, PNG или GIF."
             )

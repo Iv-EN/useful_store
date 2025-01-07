@@ -13,7 +13,7 @@ def home(request):
     products = Product.objects.all()
     categories = Category.objects.all()
     paginator = Paginator(products, PER_PAGE)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     context = {"page_obj": page_obj, "categories": categories}
     return render(request, "catalog/product_list.html", context)
@@ -53,7 +53,9 @@ def product_create(request):
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save()
-            messages.success(request, f"Продукт '{product.name}' успешно создан")
+            messages.success(
+                request, f"Продукт '{product.name}' успешно создан"
+            )
             return redirect("catalog:product_detail", product_id=product.id)
     form = ProductForm()
     return render(request, "catalog/product_create.html", {"form": form})
