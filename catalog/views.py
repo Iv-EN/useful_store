@@ -1,15 +1,22 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
+from django.shortcuts import redirect, render
 
-from .models import Contact, Product
+from .forms import ProductForm
+from .models import Category, Contact, Product
+
+PER_PAGE = 8
 
 
 def home(request):
     """Отображает главную страницу."""
-    last_five = Product.objects.all().order_by("-created_at")[:5]
-    for product in last_five:
-        print(product)
-    return render(request, "home.html")
+    products = Product.objects.all()
+    categories = Category.objects.all()
+    paginator = Paginator(products, PER_PAGE)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {"page_obj": page_obj, "categories": categories}
+    return render(request, "catalog/product_list.html", context)
 
 
 def contacts(request):
@@ -32,3 +39,21 @@ def contacts(request):
             f"Спасибо, {user_name}! Данные успешно переданы.",
         )
     return render(request, template, context)
+
+
+def product_detail(request, pk):
+    """Отображение детальной информации о продукте."""
+    product = Product.objects.get(id=pk)
+    return render(request, "catalog/product_detail.html", {"product": product})
+
+
+def product_create(request):
+    """Создание нового продукта."""
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save()
+            messages.success(request, f"Продукт '{product.name}' успешно создан")
+            return redirect("catalog:product_detail", product_id=product.id)
+    form = ProductForm()
+    return render(request, "catalog/product_create.html", {"form": form})

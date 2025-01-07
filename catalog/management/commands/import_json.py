@@ -1,6 +1,6 @@
 import json
-import os.path
 import logging
+import os.path
 
 from django.conf import settings
 from django.core.management import BaseCommand
