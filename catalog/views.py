@@ -56,6 +56,6 @@ def product_create(request):
             messages.success(
                 request, f"Продукт '{product.name}' успешно создан"
             )
-            return redirect("catalog:product_detail", product_id=product.id)
+            return redirect("catalog:product_detail", pk=product.id)
     form = ProductForm()
     return render(request, "catalog/product_create.html", {"form": form})
