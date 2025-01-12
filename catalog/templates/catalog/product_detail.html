@@ -3,9 +3,6 @@
 {% block title %}
     Сведения о: {{ product.name|title }}
 {% endblock title %}
-{% block menu %}
-    {% include "catalog/includes/inc_menu.html" %}
-{% endblock menu %}
 {% block content %}
 <div class="container">
     <div class="row w-100">
@@ -25,7 +22,7 @@
                     </ul>
                 </div>
                 <div class="mt-auto mb-3">
-                    <a href="{% url 'catalog:home' %}" class="btn btn-primary">К списку товаров</a>
+                    <a href="{% url 'catalog:products_list' %}" class="btn btn-primary">К списку товаров</a>
                 </div>
             </div>
         </div>

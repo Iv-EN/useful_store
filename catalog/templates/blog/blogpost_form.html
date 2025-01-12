@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}
+    Статья
+{% endblock title %}
+{% block content %}
+    <h2>{{ view.object.pk|yesno:"Редактировать пост, Новый пост" }}</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a class="p-2 btn btn-warning" href="/blog">Отмена</a>
+  </form>
+{% endblock content %}

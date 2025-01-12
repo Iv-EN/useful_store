@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% block menu %}
-    {% include "catalog/includes/inc_menu.html" %}
-{% endblock menu %}
+{% block title %}
+    Контакты
+{% endblock title %}
 {% block content %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Контакты</h1>
@@ -9,7 +9,7 @@
 <div class="container">
     <div class="row text-start">
         <div class="col-lg-9 col-md-6 col-sm-12">
-            {% for contact in contacts %}
+            {% for contact in object_list %}
                 <div class="card mb-4 box-shadow">
                     <div class="card-body">
                         <table class="table table-striped">

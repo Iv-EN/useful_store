@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}
+    Блог
+{% endblock title %}
+{% block content %}
+  <ul>
+    {% for post in posts %}
+      <li>
+        <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
+        <p>Создан: {{ post.created_at }} - Просмотров: {{ post.number_views }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+
+{% include "catalog/includes/inc_paginator.html" %}
+{% endblock %}

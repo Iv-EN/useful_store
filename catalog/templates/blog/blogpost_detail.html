@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h1>{{ post.title }}</h1>
+  <p>Создан: {{ post.created_at }} - Просмотров: {{ post.number_views }}</p>
+  <div class="card-body p-3">
+    <img src="{{ post.preview.url }}" alt="{{ post.title }}" width="60%">
+    <p>{{ post.content|safe }}</p>
+  </div>
+  <div class="mt-auto mb-3">
+    <a href="{% url 'blog:post_list' %}" class="btn btn-primary">К списку статей</a>
+    <a href="{% url 'blog:post_edit' post.pk %}" class="btn btn-warning">Редактировать</a>
+    <a href="{% url 'blog:post_delete' post.pk %}" class="btn btn-danger">Удалить</a>
+  </div>
+
+{% endblock %}
