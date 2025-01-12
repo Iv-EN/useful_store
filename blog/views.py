@@ -1,4 +1,3 @@
-from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -35,6 +34,8 @@ class BlogPostUpdateView(UpdateView):
 
 
 class BlogPostDetailView(DetailView):
+    """Представление для отображения детальной страницы статьи в блоге."""
+
     model = BlogPost
     template_name = "blog/blogpost_detail.html"
     context_object_name = "post"
@@ -61,6 +62,8 @@ class BlogPostListView(ListView):
 
 
 class BlogPostDeleteView(DeleteView):
+    """Представление для удаления статьи в блоге."""
+
     model = BlogPost
     template_name = "blog/blog_confirm_delete.html"
     success_url = reverse_lazy("blog:post_list")
