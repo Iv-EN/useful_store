@@ -5,6 +5,15 @@
     <h5 class="my-0 mr-md-auto font-weight-normal">IvEN</h5>
     <nav class="ms-5">
         <a class="p-2 btn btn-outline-primary" href="/">Каталог продуктов</a>
+        {% if request.path == '/' %}
+            <a class="p-2 btn btn-outline-primary" href="product/create">Добавить продукт</a>
+        {% endif %}
         <a class="p-2 btn btn-outline-primary" href="/contacts/">Контакты</a>
+        {% if request.path != '/blog/' %}
+            <a class="p-2 btn btn-outline-primary" href="/blog">Перейти в блог</a>
+        {% endif %}
+        {% if request.path == '/blog/' %}
+            <a class="p-2 btn btn-outline-primary" href="{% url 'blog:post_create' %}">Новая статья</a>
+        {% endif %}
     </nav>
 </div>
