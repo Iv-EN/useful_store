@@ -9,10 +9,10 @@
             <a class="p-2 btn btn-outline-primary" href="product/create">Добавить продукт</a>
         {% endif %}
         <a class="p-2 btn btn-outline-primary" href="/contacts/">Контакты</a>
-        {% if request.path != '/blog/' %}
-            <a class="p-2 btn btn-outline-primary" href="/blog">Перейти в блог</a>
+        {% if request.path != '/blogs/' %}
+            <a class="p-2 btn btn-outline-primary" href="/blogs">Перейти в блог</a>
         {% endif %}
-        {% if request.path == '/blog/' %}
+        {% if request.path == '/blogs/' %}
             <a class="p-2 btn btn-outline-primary" href="{% url 'blog:post_create' %}">Новая статья</a>
         {% endif %}
     </nav>
