@@ -25,24 +25,34 @@ class ProductForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["name"].widget.attrs.update({
-            "class": "form-control",
-            "placeholder": "Введите название продукта",
-        })
-        self.fields["description"].widget.attrs.update({
-            "class": "form-control",
-            "placeholder": "Введите описание продукта",
-        })
-        self.fields["image"].widget.attrs.update({
-            "class": "form-control",
-        })
-        self.fields["category"].widget.attrs.update({
-            "class": "form-control",
-        })
-        self.fields["price"].widget.attrs.update({
-            "class": "form-control",
-            "placeholder": "Введите цену продукта",
-        })
+        self.fields["name"].widget.attrs.update(
+            {
+                "class": "form-control",
+                "placeholder": "Введите название продукта",
+            }
+        )
+        self.fields["description"].widget.attrs.update(
+            {
+                "class": "form-control",
+                "placeholder": "Введите описание продукта",
+            }
+        )
+        self.fields["image"].widget.attrs.update(
+            {
+                "class": "form-control",
+            }
+        )
+        self.fields["category"].widget.attrs.update(
+            {
+                "class": "form-control",
+            }
+        )
+        self.fields["price"].widget.attrs.update(
+            {
+                "class": "form-control",
+                "placeholder": "Введите цену продукта",
+            }
+        )
 
     def clean_name(self):
         """Проверка на наличие запрещенных слов в названии."""
@@ -80,7 +90,5 @@ class ProductForm(forms.ModelForm):
         """Проверка, что цена является не отрицательным числом."""
         price = self.cleaned_data.get("price")
         if price is not None and price < 0:
-            raise forms.ValidationError(
-                "Цена не может быть отрицательной."
-            )
+            raise forms.ValidationError("Цена не может быть отрицательной.")
         return price

@@ -13,19 +13,27 @@ class BlogPostForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["title"].widget.attrs.update({
-            "class": "form-control",
-            "placeholder": "Введите заголовок",
-        })
-        self.fields["content"].widget.attrs.update({
-            "class": "form-control",
-            "placeholder": "Введите текст статьи",
-            "rows": 10,
-        })
-        self.fields["preview"].widget.attrs.update({
-            "class": "form-control",
-            "placeholder": "Выберите изображение",
-        })
-        self.fields["is_published"].widget.attrs.update({
-            "class": "form-check-input",
-        })
+        self.fields["title"].widget.attrs.update(
+            {
+                "class": "form-control",
+                "placeholder": "Введите заголовок",
+            }
+        )
+        self.fields["content"].widget.attrs.update(
+            {
+                "class": "form-control",
+                "placeholder": "Введите текст статьи",
+                "rows": 10,
+            }
+        )
+        self.fields["preview"].widget.attrs.update(
+            {
+                "class": "form-control",
+                "placeholder": "Выберите изображение",
+            }
+        )
+        self.fields["is_published"].widget.attrs.update(
+            {
+                "class": "form-check-input",
+            }
+        )
