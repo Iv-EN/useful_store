@@ -70,9 +70,7 @@ class ProductView(View):
             form = self.form_class()
             title = "Создать продукт"
         return render(
-            request,
-            self.template_name,
-            {'form': form, 'title': title}
+            request, self.template_name, {"form": form, "title": title}
         )
 
     def post(self, request, pk=None):
@@ -89,9 +87,7 @@ class ProductView(View):
             return redirect("catalog:product_detail", pk=product.pk)
         title = "Редактировать продукт" if pk else "Создать продукт"
         return render(
-            request,
-            self.template_name,
-            {'form': form, 'title': title}
+            request, self.template_name, {"form": form, "title": title}
         )
 
 
