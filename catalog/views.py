@@ -1,5 +1,9 @@
-from django.shortcuts import redirect
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic.edit import DeleteView, UpdateView
 
 from .forms import ProductForm
 from .models import Category, Contact, Product
@@ -50,14 +54,54 @@ class ProductDetailView(DetailView):
     model = Product
 
 
-class ProductCreateView(CreateView):
-    """Представление для создания нового продукта."""
+class ProductView(View):
+    """Представление для создания и редактирования продукта."""
 
     model = Product
     form_class = ProductForm
-    template_name = "catalog/product_create.html"
+    template_name = "catalog/product_form.html"
 
-    def form_valid(self, form):
-        product = form.save(commit=False)
-        product.save()
-        return redirect("catalog:product_detail", pk=product.pk)
+    def get(self, request, pk=None):
+        if pk:
+            product = self.model.objects.get(pk=pk)
+            form = self.form_class(instance=product)
+            title = "Редактировать продукт"
+        else:
+            form = self.form_class()
+            title = "Создать продукт"
+        return render(
+            request,
+            self.template_name,
+            {'form': form, 'title': title}
+        )
+
+    def post(self, request, pk=None):
+        if pk:
+            product = self.model.objects.get(pk=pk)
+            form = self.form_class(
+                request.POST, request.FILES, instance=product
+            )
+        else:
+            form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save()
+            messages.success(request, "Продукт успешно создан.")
+            return redirect("catalog:product_detail", pk=product.pk)
+        title = "Редактировать продукт" if pk else "Создать продукт"
+        return render(
+            request,
+            self.template_name,
+            {'form': form, 'title': title}
+        )
+
+
+class ProductDeleteView(DeleteView):
+    """Представление для удаления продукта."""
+
+    model = Product
+    template_name = "catalog/product_confirm_delete.html"
+    success_url = reverse_lazy("catalog:products_list")
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Продукт успешно удален.")
+        return super().delete(request, *args, **kwargs)

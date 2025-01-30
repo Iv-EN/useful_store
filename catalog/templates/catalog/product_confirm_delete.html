@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load my_tags %}
+{% block title %}
+    Удаление продукта: {{ object.name|title }}
+{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <div class="row w-100">
+        <div class="col text-center d-flex">
+            <div class="card mb-4 w-100 d-flex flex-column justify-content-between h-100">
+                <div>
+                    <h3 class="card-title pricing-card-title">Вы уверены, что хотите удалить этот продукт?</h3>
+                    <div class="card-body p-3">
+                        <img src="{{ object.image | media_filter }}" class="img-top img-fluid my-3" width=360px>
+                        <h4 class="my-0 font-weight-normal">{{ object.name }}</h4>
+                        <p>Цена: {{ object.price }} рублей</p>
+                        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                            <li>Категория: {{ object.category }}</li>
+                            <li>Описание: {{ object.description }}</li>
+                            <li>Дата создания: {{ object.created_at }}</li>
+                            <li>Дата изменения: {{ object.updated_at }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-auto mb-3">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                        <a href="{% url 'catalog:product_detail' object.pk %}" class="btn btn-primary">Отмена</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
