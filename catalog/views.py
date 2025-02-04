@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
@@ -26,7 +27,7 @@ class ProductListView(ListView):
         return context
 
 
-class ContactView(ListView):
+class ContactView(LoginRequiredMixin, ListView):
     """
     Представление для отображения списка контактов
     с формой для отправки сообщений.
@@ -48,13 +49,13 @@ class ContactView(ListView):
         return redirect("catalog:contacts")
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     """Представление для отображения детальной информации о продукте."""
 
     model = Product
 
 
-class ProductView(View):
+class ProductView(LoginRequiredMixin, View):
     """Представление для создания и редактирования продукта."""
 
     model = Product
@@ -91,7 +92,7 @@ class ProductView(View):
         )
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     """Представление для удаления продукта."""
 
     model = Product

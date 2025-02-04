@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "catalog.apps.CatalogConfig",
     "blog.apps.BlogConfig",
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -64,6 +65,9 @@ DATABASES = {
         "PORT": os.getenv("PORT"),
     }
 }
+
+
+AUTH_USER_MODEL = "users.MyUser"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -108,3 +112,8 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
+
+
+LOGIN_URL = "users:login"
+LOGIN_REDIRECT_URL = "catalog:products_list"
+LOGOUT_REDIRECT_URL = "catalog:products_list"

@@ -1,19 +1,32 @@
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Лучший интернет магазин</title>
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
     <h5 class="my-0 mr-md-auto font-weight-normal">IvEN</h5>
-    <nav class="ms-5">
-        <a class="p-2 btn btn-outline-primary" href="/">Каталог продуктов</a>
-        {% if request.path == '/' %}
-            <a class="p-2 btn btn-outline-primary" href="product/create">Добавить продукт</a>
-        {% endif %}
-        <a class="p-2 btn btn-outline-primary" href="/contacts/">Контакты</a>
-        {% if request.path != '/blogs/' %}
-            <a class="p-2 btn btn-outline-primary" href="/blogs">Перейти в блог</a>
-        {% endif %}
-        {% if request.path == '/blogs/' %}
-            <a class="p-2 btn btn-outline-primary" href="{% url 'blog:post_create' %}">Новая статья</a>
-        {% endif %}
+    <nav class="ms-auto d-flex justify-content-between w-100">
+        <div class="d-flex">
+            <a class="p-2 btn btn-outline-primary" href="/">Каталог продуктов</a>
+            {% if user.is_authenticated %}
+            {% if request.path == '/' %}
+                <a class="p-2 btn btn-outline-primary" href="product/create">Добавить продукт</a>
+            {% endif %}
+            <a class="p-2 btn btn-outline-primary" href="/contacts/">Контакты</a>
+            {% if request.path != '/blogs/' %}
+                <a class="p-2 btn btn-outline-primary" href="/blogs">Перейти в блог</a>
+            {% endif %}
+            {% if request.path == '/blogs/' %}
+                <a class="p-2 btn btn-outline-primary" href="{% url 'blog:post_create' %}">Новая статья</a>
+            {% endif %}
+            {% endif %}
+        </div>
+        <div class="d-flex ms-auto">
+            {% if user.is_authenticated %}
+                 <form action="{% url 'users:logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item dd-item-color">Выйти</button>
+                 </form>
+                 <a m:5 href="{% url 'users:profile_edit' %}">Изменить профиль</a>
+            {% else %}
+                <a class="btn btn-outline-primary me-2" href="{% url 'users:login' %}">Войти</a>
+                <a class="btn btn-outline-primary" href="{% url 'users:register' %}">Зарегистрироваться</a>
+            {% endif %}
+        </div>
     </nav>
 </div>
