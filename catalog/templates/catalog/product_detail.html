@@ -19,12 +19,19 @@
                         <li>Описание: {{ product.description }}</li>
                         <li>Дата создания: {{ product.created_at }}</li>
                         <li>Дата изменения: {{ product.updated_at }}</li>
+                        <li>Владелец: {{ product.owner }}</li>
+                        <li>Право: {{ can_unp }}</li>
                     </ul>
                 </div>
                 <div class="mt-auto mb-3">
                     <a href="{% url 'catalog:products_list' %}" class="btn btn-primary">К списку товаров</a>
-                    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning">Редактировать</a>
-                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+                    {% if product.owner == request.user %}
+                        <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning">Редактировать</a>
+                        <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+                    {% elif can_unp %}
+                        <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning">Отменить публикацию</a>
+                        <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

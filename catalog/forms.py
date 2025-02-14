@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
+from PIL import Image
 
 from .models import Product
 
@@ -21,10 +23,18 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ["name", "description", "image", "category", "price"]
+        fields = [
+            "name",
+            "description",
+            "image",
+            "category",
+            "price",
+            "is_published",
+        ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, request=None, **kwargs):
         super().__init__(*args, **kwargs)
+        self.request = request
         self.fields["name"].widget.attrs.update(
             {
                 "class": "form-control",
@@ -53,6 +63,12 @@ class ProductForm(forms.ModelForm):
                 "placeholder": "Введите цену продукта",
             }
         )
+        self.fields["is_published"].widget.attrs.update(
+            {
+                "class": "form-check-input",
+                "placeholder": "Опубликовать на сайте",
+            }
+        )
 
     def clean_name(self):
         """Проверка на наличие запрещенных слов в названии."""
@@ -76,6 +92,11 @@ class ProductForm(forms.ModelForm):
         """Проверка, что файл является изображением."""
         image = self.cleaned_data.get("image")
         if image:
+            try:
+                img = Image.open(image)
+                img.verify()
+            except Exception:
+                raise forms.ValidationError("Файл не является изображением.")
             if not image.name.endswith(("jpeg", "png")):
                 raise forms.ValidationError(
                     "Изображение должно быть в формате JPEG или PNG."
