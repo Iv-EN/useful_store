@@ -1,15 +1,19 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import DeleteView
 
 from .forms import ProductForm
 from .models import Category, Contact, Product
+from .services import get_product_by_category
 
 PRODUCT_PER_PAGE = 8
 """Количество продуктов отображаемых на странице."""
@@ -26,13 +30,19 @@ class ProductListView(ListView):
     def get_queryset(self):
         """Возвращает продукты в зависимости от статуса пользователя."""
         user = self.request.user
-        if user.is_authenticated:
-            return Product.objects.filter(
-                Q(is_published=True) | Q(owner=user)
-            ).order_by("-created_at")
-        return Product.objects.filter(is_published=True).order_by(
-            "-created_at"
-        )
+        cache_key = f"product_list_{user.id if user.is_authenticated else 'quest'}_cache"
+        queryset = cache.get(cache_key)
+        if queryset is None:
+            if user.is_authenticated:
+                queryset = Product.objects.filter(
+                    Q(is_published=True) | Q(owner=user)
+                ).order_by("-created_at")
+            else:
+                queryset = Product.objects.filter(is_published=True).order_by(
+                    "-created_at"
+                )
+            cache.set(cache_key, queryset, 60 * 15)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -63,17 +73,11 @@ class ContactView(LoginRequiredMixin, ListView):
         return redirect("catalog:contacts")
 
 
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class ProductDetailView(LoginRequiredMixin, DetailView):
     """Представление для отображения детальной информации о продукте."""
 
     model = Product
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["can_unp"] = self.request.user.has_perm(
-            'catalog.can_unpublish_product'
-        )
-        return context
 
 
 class ProductView(LoginRequiredMixin, View):
@@ -118,8 +122,9 @@ class ProductView(LoginRequiredMixin, View):
         else:
             form = self.form_class()
         return render(
-            request, self.template_name,
-            {"form": form, "title": title, "can_unp": can_unp}
+            request,
+            self.template_name,
+            {"form": form, "title": title, "can_unp": can_unp},
         )
 
     def post(self, request, pk=None):
@@ -177,7 +182,8 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             and product.owner != request.user
         ):
             messages.error(
-                self.request, "У вас недостаточно прав для удаления продукта.")
+                self.request, "У вас недостаточно прав для удаления продукта."
+            )
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 
@@ -189,5 +195,19 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def handle_no_permission(self):
         """Обрабатывает отсутствие прав у пользователя."""
         messages.error(
-            self.request, "У вас недостаточно прав для удаления продукта.")
+            self.request, "У вас недостаточно прав для удаления продукта."
+        )
         return super().handle_no_permission()
+
+
+class ProductsByCategoryView(View):
+    """Представление для отображения продуктов по категории."""
+
+    def get(self, request, category_id):
+        category = get_object_or_404(Category, id=category_id)
+        products = get_product_by_category(category_id)
+        context = {
+            "products": products,
+            "category": category,
+        }
+        return render(request, "catalog/products_by_category.html", context)
