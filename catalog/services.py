@@ -1,5 +1,6 @@
-from .models import Product
 from django.core.cache import cache
+
+from .models import Product
 
 
 def get_product_by_category(category_id):

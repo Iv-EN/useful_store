@@ -127,34 +127,50 @@ class ProductView(LoginRequiredMixin, View):
             {"form": form, "title": title, "can_unp": can_unp},
         )
 
-    def post(self, request, pk=None):
-        """Обрабатывает запрос на создание или редактирование продукта."""
-        product, _ = self.get_form_and_title(pk)
-        if product:
-            if not self.has_permission(product, request.user):
-                raise PermissionDenied()
-            if product.owner == request.user:
-                form = self.form_class(
-                    request.POST, request.FILES, instance=product
-                )
-            elif request.user.has_perm("catalog.can_unpublish_product"):
-                form = self.form_class(request.POST, instance=product)
-                for field in self.FIELDS_TO_POP:
-                    form.fields.pop(field, None)
-            else:
-                form = self.form_class(request.POST, request.FILES)
+    def get_object(self, pk):
+        """Возвращает продукт по его pk."""
+        return get_object_or_404(Product, pk=pk)
+
+    def create_product(self, request):
+        """Обрабатывает запрос на создание продукта."""
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
-            if product.owner != request.user:
-                product.owner = product.owner
+            product.owner = request.user
             product.save()
-            message = "Продукт обновлён." if pk else "Продукт создан"
-            messages.success(request, message)
+            message = "Продукт создан."
+            messages.info(request, message)
             return redirect("catalog:product_detail", pk=product.pk)
-        title = "Редактировать продукт" if pk else "Создать продукт"
         return render(
-            request, self.template_name, {"form": form, "title": title}
+            request,
+            self.template_name,
+            {"form": form, "title": "Создать продукт"},
         )
+
+    def update_product(self, request, product):
+        """Обрабатывает запрос на редактирование продукта."""
+        if self.has_permission(product, request.user):
+            form = self.form_class(
+                request.POST, request.FILES, instance=product
+            )
+            if form.is_valid():
+                product.save()
+                message = "Продукт изменён."
+                messages.info(request, message)
+                return redirect("catalog:product_detail", pk=product.pk)
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "title": "Редактировать продукт"},
+        )
+
+    def post(self, request, pk=None):
+        """Обрабатывает запрос на создание или редактирование продукта."""
+        if pk:
+            product = self.get_object(pk)
+            return self.update_product(request, product)
+        else:
+            return self.create_product(request)
 
 
 class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

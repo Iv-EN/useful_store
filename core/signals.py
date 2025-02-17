@@ -1,9 +1,10 @@
 from pathlib import Path
 
-from django.db.models.signals import post_delete, post_save
-from django.core.mail import send_mail
-from django.dispatch import receiver
 from django.conf import settings
+from django.core.mail import send_mail
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
+
 from blog.models import BlogPost
 
 

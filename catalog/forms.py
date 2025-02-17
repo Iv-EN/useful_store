@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.core.exceptions import PermissionDenied
 from PIL import Image
 
 from .models import Product

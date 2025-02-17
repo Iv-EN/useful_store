@@ -1,5 +1,5 @@
-from django.core.validators import RegexValidator
 from django.conf import settings
+from django.core.validators import RegexValidator
 from django.db import models
 
 

@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from core.functions import clean_phone_number
 from .models import MyUser
 
 
